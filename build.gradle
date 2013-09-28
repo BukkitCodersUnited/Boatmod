@@ -1,0 +1,50 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+group = "com.Myekaansmine"
+version = "14"
+
+sourceCompatibility = 1.7
+
+repositories {
+  mavenLocal()
+    mavenCentral()
+	maven {
+		url "http://repo.bukkit.org/content/groups/public"
+	}
+	maven {
+		url "http://repo.sacredlabyrinth.net:8081/artifactory/remote-repos/BukkitDev"
+	}	
+}
+
+dependencies {
+	compile 'org.bukkit:craftbukkit:1.6.4-R0.1-SNAPSHOT'
+	compile 'org.bukkit:PermissionsBukkit:1.2'
+    compile fileTree(dir: 'lib', include: '*.jar')
+}
+
+sourceSets {
+	main {
+		java {
+			srcDir 'src'
+		}
+		resources {
+			srcDir "$projectDir"
+			include 'plugin.yml'
+			include 'default.cfg'
+			include 'autoship.js'
+		}
+	}
+}
+
+processResources  {
+	filter ReplaceTokens, tokens: [
+		version: project.version,
+	]
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '1.6'
+}
